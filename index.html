@@ -309,16 +309,16 @@ body .item.is-facing .tag{opacity:1;transform:translate(-50%,-5px)}
 const FALLBACK={s:"assets/jacket-side.webp",f:"assets/jacket-front.webp",b:"assets/jacket-back.webp"};
 const VIEWS=["s","f","b"];
 const P=[
-{id:"cocoa",n:"Cocoa Zip Hoodie",p:1999,v:"",d:"Heavyweight cocoa fleece zip hoodie, oversized fit.",images:{s:"assets/products/cocoa/side.webp",f:"assets/products/cocoa/front.webp",b:"assets/products/cocoa/back.webp"}},
-{id:"sage",n:"Sage Zip Hoodie",p:1999,v:"v2",d:"Soft sage everyday zip hoodie.",images:{s:"assets/products/sage/side.webp",f:"assets/products/sage/front.webp",b:"assets/products/sage/back.webp"}},
-{id:"slate",n:"Slate Zip Hoodie",p:2199,v:"v3",d:"Clean slate grey zip hoodie.",images:{s:"assets/products/slate/side.webp",f:"assets/products/slate/front.webp",b:"assets/products/slate/back.webp"}},
-{id:"rose",n:"Rosé Zip Hoodie",p:1999,v:"v4",d:"Soft dusty rose zip hoodie.",images:{s:"assets/products/rose/side.webp",f:"assets/products/rose/front.webp",b:"assets/products/rose/back.webp"}},
-{id:"sand",n:"Sand Zip Hoodie",p:1999,v:"v5",d:"Warm sandstone neutral zip hoodie.",images:{s:"assets/products/sand/side.webp",f:"assets/products/sand/front.webp",b:"assets/products/sand/back.webp"}},
-{id:"forest",n:"Forest Zip Hoodie",p:2199,v:"v6",d:"Forest green zip hoodie.",images:{s:"assets/products/forest/side.webp",f:"assets/products/forest/front.webp",b:"assets/products/forest/back.webp"}},
-{id:"mocha",n:"Mocha Zip Hoodie",p:1999,v:"v7",d:"Rich mocha zip hoodie.",images:{s:"assets/products/mocha/side.webp",f:"assets/products/mocha/front.webp",b:"assets/products/mocha/back.webp"}},
-{id:"charcoal",n:"Charcoal Zip Hoodie",p:2199,v:"v8",d:"Charcoal minimalist zip hoodie.",images:{s:"assets/products/charcoal/side.webp",f:"assets/products/charcoal/front.webp",b:"assets/products/charcoal/back.webp"}},
-{id:"cream",n:"Cream Zip Hoodie",p:1999,v:"v9",d:"Cream relaxed zip hoodie.",images:{s:"assets/products/cream/side.webp",f:"assets/products/cream/front.webp",b:"assets/products/cream/back.webp"}},
-{id:"dusty-blue",n:"Dusty Blue Zip Hoodie",p:2199,v:"v10",d:"Muted dusty blue zip hoodie.",images:{s:"assets/products/dusty-blue/side.webp",f:"assets/products/dusty-blue/front.webp",b:"assets/products/dusty-blue/back.webp"}}
+{id:"sandstone",n:"Sandstone Zip Hoodie",p:1999,v:"",d:"Sandstone neutral oversized zip hoodie.",images:{s:"assets/products/sandstone/side.webp",f:"assets/products/sandstone/front.webp",b:"assets/products/sandstone/back.webp"}},
+{id:"midnight",n:"Midnight Zip Hoodie",p:2199,v:"v2",d:"Midnight black oversized zip hoodie.",images:{s:"assets/products/midnight/side.webp",f:"assets/products/midnight/front.webp",b:"assets/products/midnight/back.webp"}},
+{id:"olive",n:"Olive Zip Hoodie",p:1999,v:"v3",d:"Olive green oversized zip hoodie.",images:{s:"assets/products/olive/side.webp",f:"assets/products/olive/front.webp",b:"assets/products/olive/back.webp"}},
+{id:"navy",n:"Navy Zip Hoodie",p:2199,v:"v4",d:"Deep navy oversized zip hoodie.",images:{s:"assets/products/navy/side.webp",f:"assets/products/navy/front.webp",b:"assets/products/navy/back.webp"}},
+{id:"ivory",n:"Ivory Zip Hoodie",p:1999,v:"v5",d:"Ivory cream oversized zip hoodie.",images:{s:"assets/products/ivory/side.webp",f:"assets/products/ivory/front.webp",b:"assets/products/ivory/back.webp"}},
+{id:"coffee",n:"Coffee Zip Hoodie",p:1999,v:"v6",d:"Coffee brown oversized zip hoodie.",images:{s:"assets/products/coffee/side.webp",f:"assets/products/coffee/front.webp",b:"assets/products/coffee/back.webp"}},
+{id:"slate",n:"Slate Zip Hoodie",p:2199,v:"v7",d:"Cool grey oversized zip hoodie.",images:{s:"assets/products/slate/side.webp",f:"assets/products/slate/front.webp",b:"assets/products/slate/back.webp"}},
+{id:"mauve",n:"Mauve Zip Hoodie",p:1999,v:"v8",d:"Dusty mauve oversized zip hoodie.",images:{s:"assets/products/mauve/side.webp",f:"assets/products/mauve/front.webp",b:"assets/products/mauve/back.webp"}},
+{id:"charcoal",n:"Charcoal Zip Hoodie",p:2199,v:"v9",d:"Charcoal black oversized zip hoodie.",images:{s:"assets/products/charcoal/side.webp",f:"assets/products/charcoal/front.webp",b:"assets/products/charcoal/back.webp"}},
+{id:"sage",n:"Sage Zip Hoodie",p:1999,v:"v10",d:"Soft sage oversized zip hoodie.",images:{s:"assets/products/sage/side.webp",f:"assets/products/sage/front.webp",b:"assets/products/sage/back.webp"}}
 ];
 const availableAssets=new Set();
 function productAsset(j,view){return availableAssets.has(j.id+":"+view)?j.images[view]:FALLBACK[view]}
