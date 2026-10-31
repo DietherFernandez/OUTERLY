@@ -305,13 +305,13 @@ function layoutRack(){
  items.forEach((b,i)=>{
   const slot=i-start,visible=slot>=0&&slot<slots;
   const spread=expandedIndex>=start&&expandedIndex<start+slots&&visible
-    ? (i<expandedIndex?-5.2:i>expandedIndex?5.2:0) : 0;
+    ? (i<expandedIndex?-(mobile?2.5:5.2):i>expandedIndex?(mobile?2.5:5.2):0) : 0;
   b.classList.toggle('is-hidden',!visible);
   b.classList.toggle('on',visible&&i===expandedIndex&&touch);
   b.classList.toggle('is-facing',visible&&i===expandedIndex);
   b.setAttribute('aria-pressed',String(visible&&i===expandedIndex));
   b.tabIndex=visible?0:-1;
-  const positions=mobile?[40,60]:XS;
+  const positions=mobile?[46,54]:XS;
   b.style.left=visible?positions[slot]+'%':'-100%';
   b.style.setProperty('--spread',spread+'cqw');
  });
