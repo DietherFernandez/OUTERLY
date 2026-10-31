@@ -251,8 +251,8 @@ body .item.is-facing .tag{opacity:1;transform:translate(-50%,-5px)}
  /* Crop the empty ceiling, never the jacket hems. Keep the photo's original ratio. */
  .stage.photo-ready{margin-top:-285px;min-width:640px;width:640px;aspect-ratio:941/1672}
  .stage.photo-ready .item{top:35.9%}
- .stage.photo-ready .item .pic{width:27cqw;margin-left:-13.365cqw}
- .stage.photo-ready .item::before{width:19cqw;height:31cqw}
+ .stage.photo-ready .item .pic{width:24.5cqw;margin-left:-12.125cqw}
+ .stage.photo-ready .item::before{width:17cqw;height:28cqw}
  .stage:not(.photo-ready){min-width:800px}
  .stage:not(.photo-ready) .item .pic{width:23cqw;margin-left:-11.385cqw}
  .rack-controls{position:sticky;bottom:0;z-index:12;padding:10px 14px max(10px,env(safe-area-inset-bottom))}
@@ -305,13 +305,13 @@ function layoutRack(){
  items.forEach((b,i)=>{
   const slot=i-start,visible=slot>=0&&slot<slots;
   const spread=expandedIndex>=start&&expandedIndex<start+slots&&visible
-    ? (i<expandedIndex?-(mobile?2.5:5.2):i>expandedIndex?(mobile?2.5:5.2):0) : 0;
+    ? (i<expandedIndex?-(mobile?4:5.2):i>expandedIndex?(mobile?2.5:5.2):0) : 0;
   b.classList.toggle('is-hidden',!visible);
   b.classList.toggle('on',visible&&i===expandedIndex&&touch);
   b.classList.toggle('is-facing',visible&&i===expandedIndex);
   b.setAttribute('aria-pressed',String(visible&&i===expandedIndex));
   b.tabIndex=visible?0:-1;
-  const positions=mobile?[46,54]:XS;
+  const positions=mobile?[43,57]:XS;
   b.style.left=visible?positions[slot]+'%':'-100%';
   b.style.setProperty('--spread',spread+'cqw');
  });
