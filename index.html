@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OUTERLY — Jacket Boutique</title>
+<title>OUTERLY — Boutique Showroom</title>
 <style>
 :root{--bg:#f4eee4;--ink:#2a231c;--mute:#7d7266;--card:#fffaf2;--accent:#a8602f;--wall:#d6c6b0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1a16;--ink:#f2ebe0;--mute:#a89d8f;--card:#2a2621;--accent:#e0925f;color-scheme:dark}}
@@ -61,6 +61,10 @@ header{display:flex;justify-content:space-between;align-items:center;padding:13p
  .rack-controls{padding:9px 12px;gap:16px}
  .rack-nav{width:36px;height:36px;font-size:20px}
 }
+/* Refactor: respect source background proportions and keep interactions clear. */
+.stage{background-repeat:no-repeat}
+.item .hk,.item .rs{filter:drop-shadow(1px 2px 2px rgba(65,44,25,.2))}
+.rack-controls{background:var(--bg);border-top:1px solid rgba(119,93,67,.12)}
 /* Final micro-polish: calm, coordinated motion with a stable silhouette. */
 .item{transition:transform .82s cubic-bezier(.2,.72,.2,1),opacity .28s ease}
 .item .pic img{transition:transform .82s cubic-bezier(.2,.72,.2,1),opacity .5s cubic-bezier(.25,.7,.25,1)}
@@ -88,7 +92,7 @@ body .item.is-facing .pic{filter:drop-shadow(7px 11px 12px rgba(67,42,22,.2)) dr
 .shop-guide strong{color:var(--ink);font-weight:500}
 .shop-guide .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
 .stage:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,rgba(255,244,215,.10),transparent 45%,rgba(58,39,18,.06));z-index:0}
-.stage{container-type:inline-size;position:relative;width:100%;min-width:900px;max-width:1600px;margin:0 auto;aspect-ratio:1672/941;background:url(assets/wall-bg.jpg) center/100% 100%}
+.stage{container-type:inline-size;position:relative;width:100%;min-width:900px;max-width:1600px;margin:0 auto;aspect-ratio:1672/941;background:url(assets/boutique-wall.svg) center/100% 100%}
 .item{position:absolute;top:46.8%;width:7.5cqw;height:27.1cqw;margin-left:-3.75cqw;transition:left .8s cubic-bezier(.16,.82,.18,1),opacity .45s ease,filter .6s ease;border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font:inherit;transform-origin:50% 3.1%;perspective:1100px;animation:none}
 .item.on{width:18cqw;margin-left:-9cqw;filter:brightness(1.045)}
 .item:hover .pic,.item.on .pic{transform:translateY(-.55cqw) scale(1.015);filter:drop-shadow(3px 8px 8px rgba(75,49,22,.18)) drop-shadow(19px 30px 23px rgba(52,31,14,.34))}
