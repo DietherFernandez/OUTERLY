@@ -258,6 +258,32 @@ body .item.is-facing .tag{opacity:1;transform:translate(-50%,-5px)}
  .rack-controls{position:sticky;bottom:0;z-index:12;padding:10px 14px max(10px,env(safe-area-inset-bottom))}
  .rack-nav{width:44px;height:44px}
 }
+
+/* Editorial gallery — ten jackets visible on desktop, selectable thumbnails. */
+.rack-gallery{display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 18px;background:#f7f0e6}
+.product-thumbnails{display:flex;gap:6px;align-items:center;max-width:calc(100vw - 200px);overflow-x:auto;scrollbar-width:thin}
+.thumb-product{flex:0 0 100px;height:110px;border:1px solid rgba(115,93,67,.13);border-radius:12px;background:rgba(255,255,255,.26);color:#3b3026;padding:6px 4px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;transition:border-color .25s,background .25s,box-shadow .25s}
+.thumb-product.selected{border-color:#b47b43;background:rgba(255,252,246,.8);box-shadow:0 2px 10px rgba(114,73,36,.13)}
+.thumb-preview{height:79px;width:70px;position:relative}
+.thumb-preview img{height:100%;width:100%;object-fit:contain}
+.thumb-product small{font-size:10px;max-width:95px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rack-gallery .rack-count{display:none}
+@media(min-width:701px){
+ .stage.photo-ready .item .pic{width:10cqw;margin-left:-4.95cqw}
+ .stage.photo-ready .item .hk{transform:scale(.68);transform-origin:50% 0}
+ .stage.photo-ready .item.is-facing .hk{transform:scale(.68)}
+ .stage.photo-ready .item::before{width:8cqw;height:17cqw}
+ .stage.photo-ready .item .tag{font-size:10px}
+}
+@media(max-width:700px){
+ .rack-gallery{padding:8px;gap:6px}
+ .rack-gallery .rack-count{display:block}
+ .rack-gallery .product-thumbnails{max-width:calc(100vw - 165px);gap:5px}
+ .thumb-product{flex-basis:66px;height:85px;padding:3px}
+ .thumb-preview{width:45px;height:58px}
+ .thumb-product small{font-size:9px;max-width:60px}
+ .rack-gallery .rack-nav{flex-shrink:0;width:38px;height:38px}
+}
 </style>
 </head>
 <body>
@@ -267,7 +293,7 @@ body .item.is-facing .tag{opacity:1;transform:translate(-50%,-5px)}
   </div>
   <main class="scroller" aria-label="Swipe or scroll the jackets"><div class="stage" id="stage"></div></main>
 </section>
-<nav class="rack-controls" aria-label="Browse jackets"><button class="rack-nav" id="rack-prev" type="button" aria-label="Previous jacket">‹</button><output class="rack-count" id="rack-count" aria-live="polite">1 / 10</output><button class="rack-nav" id="rack-next" type="button" aria-label="Next jacket">›</button></nav>
+<nav class="rack-controls rack-gallery" aria-label="Browse jackets"><button class="rack-nav" id="rack-prev" type="button" aria-label="Previous jacket">‹</button><div id="product-thumbnails" class="product-thumbnails" aria-label="Select product"></div><output class="rack-count" id="rack-count" aria-live="polite">1 / 10</output><button class="rack-nav" id="rack-next" type="button" aria-label="Next jacket">›</button></nav>
 
 
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Detalye ng jacket" aria-hidden="true"><button class="x" id="close" type="button" aria-label="Isara ang produkto">×</button>
@@ -311,22 +337,23 @@ const count=document.getElementById("rack-count");
 let expandedIndex=-1;
 function layoutRack(){
  const mobile=matchMedia("(max-width:700px)").matches;
- const slots=mobile?2:4;
+ const slots=mobile?2:P.length;
  const start=Math.max(0,Math.min(P.length-slots,currentIndex-(mobile?0:1)));
  items.forEach((b,i)=>{
   const slot=i-start,visible=slot>=0&&slot<slots;
   const spread=expandedIndex>=start&&expandedIndex<start+slots&&visible
-    ? (i<expandedIndex?-(mobile?4:5.2):i>expandedIndex?(mobile?2.5:5.2):0) : 0;
+    ? (i<expandedIndex?-(mobile?4:1.4):i>expandedIndex?(mobile?4:1.4):0) : 0;
   b.classList.toggle('is-hidden',!visible);
   b.classList.toggle('on',visible&&i===expandedIndex&&touch);
   b.classList.toggle('is-facing',visible&&i===expandedIndex);
   b.setAttribute('aria-pressed',String(visible&&i===expandedIndex));
   b.tabIndex=visible?0:-1;
-  const positions=mobile?[43,57]:XS;
+  const positions=mobile?[43,57]:P.map((_,k)=>24.3+k*5.8);
   b.style.left=visible?positions[slot]+'%':'-100%';
   b.style.setProperty('--spread',spread+'cqw');
  });
  count.textContent=(currentIndex+1)+' / '+P.length;
+ document.querySelectorAll('.thumb-product').forEach((el,i)=>{el.classList.toggle('selected',i===currentIndex);el.setAttribute('aria-current',i===currentIndex?'true':'false')});
 }
 function setActive(k){if(k>=0)currentIndex=k;expandedIndex=-1;layoutRack()}
 function expandRack(i){expandedIndex=i;layoutRack()}
@@ -340,6 +367,15 @@ P.forEach((j,i)=>{
 }
 b.onclick=()=>{if(touch){if(expandedIndex!==i){expandRack(i);return}open(j);return}open(j)};stage.appendChild(b)});
 setActive(0);
+const thumbs=document.getElementById("product-thumbnails");
+P.forEach((j,i)=>{
+ const t=document.createElement("button");t.type="button";t.className="thumb-product";
+ t.setAttribute("aria-label","Select "+j.n);
+ t.innerHTML='<span class="thumb-preview"><img src="'+FALLBACK.f+'" class="'+j.v+'" data-product="'+j.id+'" data-view="f" alt=""></span><small>'+String(i+1).padStart(2,"0")+' '+j.n.replace(" Zip Hoodie","")+'</small>';
+ t.addEventListener("click",()=>{setActive(i);if(matchMedia("(max-width:700px)").matches)centerRack(true)});
+ thumbs.appendChild(t);
+});
+setActive(0);
 /* Stable hover zones use original rail positions, not moving element boundaries. */
 if(!touch){
  stage.addEventListener('pointermove',e=>{
@@ -348,12 +384,12 @@ if(!touch){
   const x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;
   if(y<46||y>90){if(expandedIndex!==-1){expandedIndex=-1;layoutRack()}return}
   const mobile=matchMedia("(max-width:700px)").matches;
-  const slots=mobile?2:4;
+  const slots=mobile?2:P.length;
   const start=Math.max(0,Math.min(P.length-slots,currentIndex-(mobile?0:1)));
   let slot=-1,distance=Infinity;
-  const zones=mobile?[40,60]:XS;
+  const zones=mobile?[43,57]:P.map((_,k)=>24.3+k*5.8);
   zones.forEach((pos,k)=>{const d=Math.abs(x-pos);if(d<distance){distance=d;slot=k}});
-  const chosen=distance<=(mobile?10:5.2)?start+slot:-1;
+  const chosen=distance<=(mobile?9:2.85)?start+slot:-1;
   if(chosen!==expandedIndex){expandedIndex=chosen;layoutRack()}
  },{passive:true});
  stage.addEventListener('pointerleave',()=>{if(expandedIndex!==-1){expandedIndex=-1;layoutRack()}});
