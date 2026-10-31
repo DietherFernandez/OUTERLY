@@ -188,12 +188,7 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
   <main class="scroller" aria-label="Swipe or scroll the jackets"><div class="stage" id="stage"></div></main>
 </section>
 <nav class="rack-controls" aria-label="Browse jackets"><button class="rack-nav" id="rack-prev" type="button" aria-label="Previous jacket">‹</button><output class="rack-count" id="rack-count" aria-live="polite">1 / 10</output><button class="rack-nav" id="rack-next" type="button" aria-label="Next jacket">›</button></nav>
-<div class="shop-guide"><strong>THE OUTERLY RACK</strong><span class="dot"></span><span id="guide">Explore the collection · Hover to reveal · Click to inspect</span></div>
-<section class="about">
-  <h2>Bakit Outerly?</h2>
-  <p>Curated na jackets para sa Pinoy weather at Pinoy style — magaan, matibay, at presentable mula sa mall hanggang sa mountain trip. Libreng shipping sa orders na ₱3,000 pataas.</p>
-</section>
-<footer>© 2026 Outerly. Lahat ng karapatan ay nakalaan.</footer>
+
 
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Detalye ng jacket" aria-hidden="true"><button class="x" id="close" type="button" aria-label="Isara ang produkto">×</button>
   <div class="panel" tabindex="-1">
@@ -283,7 +278,7 @@ document.addEventListener("keydown",e=>{
  else if(!e.shiftKey&&(document.activeElement===last||!m.contains(document.activeElement))){e.preventDefault();first.focus()}
 });
 function pick(){if(!touch)return;/* active carousel item remains stable during horizontal wall panning */}
-if(touch){document.getElementById("guide").textContent="Swipe the rack · Tap a jacket · Tap again to inspect";
+if(touch){
  let pickScheduled=false;sc.addEventListener("scroll",()=>{if(pickScheduled)return;pickScheduled=true;requestAnimationFrame(()=>{pickScheduled=false;pick()})},{passive:true});
 }
 const narrowScreen=matchMedia("(max-width:700px)");
