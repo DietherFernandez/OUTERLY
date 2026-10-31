@@ -280,19 +280,30 @@ body .item.is-facing .tag{opacity:1;transform:translate(-50%,-5px)}
 </div>
 
 <script>
-const IMG={s:"assets/jacket-side.webp",f:"assets/jacket-front.webp",b:"assets/jacket-back.webp"};
+const FALLBACK={s:"assets/jacket-side.webp",f:"assets/jacket-front.webp",b:"assets/jacket-back.webp"};
+const VIEWS=["s","f","b"];
 const P=[
-{n:"Cocoa Zip Hoodie",p:1999,v:"",d:"Heavyweight fleece zip hoodie sa cocoa brown. Oversized fit, ribbed cuffs at hem, may drawstring hood at kangaroo pockets. Malambot at hindi nagpa-pilling."},
-{n:"Sage Zip Hoodie",p:1999,v:"v2",d:"Preview colorway: parehong cut ng Cocoa, sa mas malamig na sage tone."},
-{n:"Slate Zip Hoodie",p:2199,v:"v3",d:"Preview colorway: dark slate para sa mas clean at minimal na look."},
-{n:"Rosé Zip Hoodie",p:1999,v:"v4",d:"Preview colorway: soft rosé na bagay sa aesthetic na ootd."},
-{n:"Sand Zip Hoodie",p:1999,v:"v5",d:"Concept colorway: warm sand, minimal at versatile."},
-{n:"Forest Zip Hoodie",p:2199,v:"v6",d:"Concept colorway: deep forest green for everyday layering."},
-{n:"Mocha Zip Hoodie",p:1999,v:"v7",d:"Concept colorway: rich mocha tone."},
-{n:"Charcoal Zip Hoodie",p:2199,v:"v8",d:"Concept colorway: dark charcoal essential."},
-{n:"Cream Zip Hoodie",p:1999,v:"v9",d:"Concept colorway: light cream neutral."},
-{n:"Dusty Blue Zip Hoodie",p:2199,v:"v10",d:"Concept colorway: muted blue layering piece."}
+{id:"cocoa",n:"Cocoa Zip Hoodie",p:1999,v:"",d:"Heavyweight cocoa fleece zip hoodie, oversized fit.",images:{s:"assets/products/cocoa/side.webp",f:"assets/products/cocoa/front.webp",b:"assets/products/cocoa/back.webp"}},
+{id:"sage",n:"Sage Zip Hoodie",p:1999,v:"v2",d:"Soft sage everyday zip hoodie.",images:{s:"assets/products/sage/side.webp",f:"assets/products/sage/front.webp",b:"assets/products/sage/back.webp"}},
+{id:"slate",n:"Slate Zip Hoodie",p:2199,v:"v3",d:"Clean slate grey zip hoodie.",images:{s:"assets/products/slate/side.webp",f:"assets/products/slate/front.webp",b:"assets/products/slate/back.webp"}},
+{id:"rose",n:"Rosé Zip Hoodie",p:1999,v:"v4",d:"Soft dusty rose zip hoodie.",images:{s:"assets/products/rose/side.webp",f:"assets/products/rose/front.webp",b:"assets/products/rose/back.webp"}},
+{id:"sand",n:"Sand Zip Hoodie",p:1999,v:"v5",d:"Warm sandstone neutral zip hoodie.",images:{s:"assets/products/sand/side.webp",f:"assets/products/sand/front.webp",b:"assets/products/sand/back.webp"}},
+{id:"forest",n:"Forest Zip Hoodie",p:2199,v:"v6",d:"Forest green zip hoodie.",images:{s:"assets/products/forest/side.webp",f:"assets/products/forest/front.webp",b:"assets/products/forest/back.webp"}},
+{id:"mocha",n:"Mocha Zip Hoodie",p:1999,v:"v7",d:"Rich mocha zip hoodie.",images:{s:"assets/products/mocha/side.webp",f:"assets/products/mocha/front.webp",b:"assets/products/mocha/back.webp"}},
+{id:"charcoal",n:"Charcoal Zip Hoodie",p:2199,v:"v8",d:"Charcoal minimalist zip hoodie.",images:{s:"assets/products/charcoal/side.webp",f:"assets/products/charcoal/front.webp",b:"assets/products/charcoal/back.webp"}},
+{id:"cream",n:"Cream Zip Hoodie",p:1999,v:"v9",d:"Cream relaxed zip hoodie.",images:{s:"assets/products/cream/side.webp",f:"assets/products/cream/front.webp",b:"assets/products/cream/back.webp"}},
+{id:"dusty-blue",n:"Dusty Blue Zip Hoodie",p:2199,v:"v10",d:"Muted dusty blue zip hoodie.",images:{s:"assets/products/dusty-blue/side.webp",f:"assets/products/dusty-blue/front.webp",b:"assets/products/dusty-blue/back.webp"}}
 ];
+const availableAssets=new Set();
+function productAsset(j,view){return availableAssets.has(j.id+":"+view)?j.images[view]:FALLBACK[view]}
+function preloadAssets(){
+ P.forEach((j,index)=>VIEWS.forEach(view=>{
+  const img=new Image();
+  img.onload=()=>{availableAssets.add(j.id+":"+view);document.querySelectorAll('[data-product="'+j.id+'"][data-view="'+view+'"]').forEach(el=>{el.src=j.images[view];el.classList.remove(j.v)});if(activeProduct===j&&activeView===view){zimg.src=j.images[view];zimg.className=""}};
+  img.onerror=()=>{};
+  img.src=j.images[view];
+ }));
+}
 const fmt=n=>"₱"+n.toLocaleString("en-PH");
 const stage=document.getElementById("stage"),XS=[39.75,47.25,54.75,62.25],items=[],touch=matchMedia('(hover:none)').matches,sc=document.querySelector('.scroller'),reducedMotion=matchMedia('(prefers-reduced-motion:reduce)').matches;
 let currentIndex=0;
@@ -322,7 +333,7 @@ function expandRack(i){expandedIndex=i;layoutRack()}
 function collapseRack(i){if(expandedIndex===i){expandedIndex=-1;layoutRack()}}
 P.forEach((j,i)=>{
  const b=document.createElement("button");b.className="item "+j.v;b.setAttribute("aria-label",`Inspect ${j.n}, ${fmt(j.p)}`);b.setAttribute("aria-pressed","false");b.type="button";
- b.innerHTML=`<svg class="hk hb" viewBox="0 0 600 400"><path d="M300 52C262 52 258 88 264 118C268 142 288 156 299 176" fill="none" stroke="#6b6964" stroke-width="14" stroke-linecap="round"/></svg><i class="rs"></i><div class="pic"><img class="s" src="${IMG.s}" alt=""><img class="f" src="${IMG.f}" alt=""></div><svg class="hk hf" viewBox="0 0 600 400"><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#8e8c86" stroke-width="14" stroke-linecap="round"/><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#e4e0d6" stroke-width="4.5" stroke-linecap="round" transform="translate(-2 -1)"/></svg><div class="tag"><b>${j.n}</b><span>${fmt(j.p)}</span></div>`;
+ b.innerHTML=`<svg class="hk hb" viewBox="0 0 600 400"><path d="M300 52C262 52 258 88 264 118C268 142 288 156 299 176" fill="none" stroke="#6b6964" stroke-width="14" stroke-linecap="round"/></svg><i class="rs"></i><div class="pic"><img class="s" src="${FALLBACK.s}" data-product="${j.id}" data-view="s" alt="${j.n} side view"><img class="f" src="${FALLBACK.f}" data-product="${j.id}" data-view="f" alt="${j.n} front view"></div><svg class="hk hf" viewBox="0 0 600 400"><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#8e8c86" stroke-width="14" stroke-linecap="round"/><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#e4e0d6" stroke-width="4.5" stroke-linecap="round" transform="translate(-2 -1)"/></svg><div class="tag"><b>${j.n}</b><span>${fmt(j.p)}</span></div>`;
  b.style.left=XS[Math.min(i,3)]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i%4]);if(!touch){
  b.addEventListener('focus',()=>{if(!b.classList.contains('is-hidden'))expandRack(i)});
  b.addEventListener('blur',()=>collapseRack(i));
@@ -352,8 +363,9 @@ document.getElementById("rack-prev").addEventListener("click",()=>navigate(-1));
 document.getElementById("rack-next").addEventListener("click",()=>navigate(1));
 let cart=0,size="M",previousFocus=null;
 const m=document.getElementById("modal"),zoom=document.getElementById("zoom"),zimg=document.getElementById("zimg"),mn=document.getElementById("mn"),mp=document.getElementById("mp"),md=document.getElementById("md"),sz=document.getElementById("sz"),buy=document.getElementById("buy");
-function show(v){zimg.src=IMG[v];zoom.classList.remove("z");document.querySelectorAll("#tabs button").forEach(t=>t.classList.toggle("on",t.dataset.v==v))}
-function open(j){size="M";zoom.className="zoom";zimg.className=j.v;show("f");
+let activeProduct=null,activeView="f";
+function show(v){activeView=v;zimg.src=productAsset(activeProduct,v);zimg.alt=activeProduct.n+" "+({f:"front",s:"side",b:"back"}[v])+" view";zimg.className=availableAssets.has(activeProduct.id+":"+v)?"":activeProduct.v;zoom.classList.remove("z");document.querySelectorAll("#tabs button").forEach(t=>t.classList.toggle("on",t.dataset.v==v))}
+function open(j){size="M";activeProduct=j;zoom.className="zoom";show("f");
  mn.textContent=j.n;mp.textContent=fmt(j.p);md.textContent=j.d;
  sz.innerHTML=["S","M","L","XL"].map(s=>`<button class="${s==size?"on":""}">${s}</button>`).join("");
  sz.querySelectorAll("button").forEach(bt=>bt.onclick=()=>{size=bt.textContent;sz.querySelectorAll("button").forEach(o=>o.classList.toggle("on",o==bt))});
@@ -411,6 +423,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 addEventListener("load",()=>centerRack(true),{once:true});
 narrowScreen.addEventListener("change",()=>{syncShowroomPhoto();updateShowroomViewport()});
 syncShowroomPhoto();
+preloadAssets();
 let resizeFrame=0;
 addEventListener("resize",()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(updateShowroomViewport)},{passive:true});
 </script>
