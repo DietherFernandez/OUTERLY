@@ -45,6 +45,13 @@ header{display:flex;justify-content:space-between;align-items:center;padding:16p
 footer{text-align:center;padding:22px;font-size:12px;color:var(--mute)}
 .modal{position:fixed;inset:0;background:rgba(18,13,9,.72);display:none;align-items:center;justify-content:center;padding:14px;z-index:50;backdrop-filter:blur(4px)}
 .modal.on{display:flex}
+.modal:not(.on){visibility:hidden}
+body.modal-open{overflow:hidden}
+button{touch-action:manipulation}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
 .panel{background:var(--card);border-radius:20px;max-width:960px;width:100%;max-height:94vh;overflow:auto;display:grid;grid-template-columns:1.15fr 1fr;animation:zoom .45s cubic-bezier(.2,.9,.2,1.1)}
 @keyframes zoom{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
 .view{background:radial-gradient(circle at 50% 35%,#f1e8d9,#d6c6b0);display:flex;flex-direction:column;align-items:center;padding:14px}
@@ -95,8 +102,8 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--mute)}
 </section>
 <footer>© 2026 Outerly. Lahat ng karapatan ay nakalaan.</footer>
 
-<div class="modal" id="modal"><button class="x" id="close" aria-label="Isara">×</button>
-  <div class="panel">
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Detalye ng jacket" aria-hidden="true"><button class="x" id="close" type="button" aria-label="Isara ang produkto">×</button>
+  <div class="panel" tabindex="-1">
     <div class="view"><div class="zoom" id="zoom"><img id="zimg" alt=""></div>
       <div class="tabs" id="tabs"><button data-v="f" class="on">Front</button><button data-v="b">Back</button><button data-v="s">Side</button></div></div>
     <div class="info"><h3 id="mn"></h3><div class="price" id="mp"></div><p id="md"></p>
@@ -113,32 +120,43 @@ const P=[
 {n:"Rosé Zip Hoodie",p:1999,v:"v4",d:"Preview colorway: soft rosé na bagay sa aesthetic na ootd."}
 ];
 const fmt=n=>"₱"+n.toLocaleString("en-PH");
-const stage=document.getElementById("stage"),XS=[39.75,47.25,54.75,62.25],items=[],touch=matchMedia('(hover:none)').matches,sc=document.querySelector('.scroller');
+const stage=document.getElementById("stage"),XS=[39.75,47.25,54.75,62.25],items=[],touch=matchMedia('(hover:none)').matches,sc=document.querySelector('.scroller'),reducedMotion=matchMedia('(prefers-reduced-motion:reduce)').matches;
 function setActive(k){items.forEach((b,i)=>{b.classList.toggle('on',i===k);b.style.left=(XS[i]+(k<0||i===k?0:i<k?-6:6))+'%'})}
 P.forEach((j,i)=>{
  const b=document.createElement("button");b.className="item "+j.v;b.setAttribute("aria-label",j.n);
  b.innerHTML=`<svg class="hk hb" viewBox="0 0 600 400"><path d="M300 52C262 52 258 88 264 118C268 142 288 156 299 176" fill="none" stroke="#6b6964" stroke-width="14" stroke-linecap="round"/></svg><i class="rs"></i><div class="pic"><img class="s" src="${IMG.s}" alt=""><img class="f" src="${IMG.f}" alt=""></div><svg class="hk hf" viewBox="0 0 600 400"><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#8e8c86" stroke-width="14" stroke-linecap="round"/><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#e4e0d6" stroke-width="4.5" stroke-linecap="round" transform="translate(-2 -1)"/></svg><div class="tag"><b>${j.n}</b><span>${fmt(j.p)}</span></div>`;
- b.style.left=XS[i]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i]);b.style.animationDuration=[5.6,6.6,6,7][i]+'s';if(!touch){b.addEventListener('pointerenter',()=>setActive(i));b.addEventListener('pointerleave',()=>setActive(-1))}b.onclick=()=>{if(touch&&!b.classList.contains('on')){setActive(i);b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});return}open(j)};stage.appendChild(b)});
-let cart=0,size="M";
-const m=document.getElementById("modal"),zoom=document.getElementById("zoom"),zimg=document.getElementById("zimg");
+ b.style.left=XS[i]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i]);b.style.animationDuration=[5.6,6.6,6,7][i]+'s';if(!touch){b.addEventListener('pointerenter',()=>setActive(i));b.addEventListener('pointerleave',()=>setActive(-1))}b.onclick=()=>{if(touch&&!b.classList.contains('on')){setActive(i);b.scrollIntoView({inline:'center',block:'nearest',behavior:reducedMotion?'auto':'smooth'});return}open(j)};stage.appendChild(b)});
+let cart=0,size="M",previousFocus=null;
+const m=document.getElementById("modal"),zoom=document.getElementById("zoom"),zimg=document.getElementById("zimg"),mn=document.getElementById("mn"),mp=document.getElementById("mp"),md=document.getElementById("md"),sz=document.getElementById("sz"),buy=document.getElementById("buy");
 function show(v){zimg.src=IMG[v];zoom.classList.remove("z");document.querySelectorAll("#tabs button").forEach(t=>t.classList.toggle("on",t.dataset.v==v))}
-function open(j){zoom.className="zoom";zimg.className=j.v;show("f");
+function open(j){size="M";zoom.className="zoom";zimg.className=j.v;show("f");
  mn.textContent=j.n;mp.textContent=fmt(j.p);md.textContent=j.d;
  sz.innerHTML=["S","M","L","XL"].map(s=>`<button class="${s==size?"on":""}">${s}</button>`).join("");
  sz.querySelectorAll("button").forEach(bt=>bt.onclick=()=>{size=bt.textContent;sz.querySelectorAll("button").forEach(o=>o.classList.toggle("on",o==bt))});
- buy.textContent="IDAGDAG SA CART";m.classList.add("on")}
+ buy.textContent="IDAGDAG SA CART";previousFocus=document.activeElement;m.classList.add("on");m.setAttribute("aria-hidden","false");document.body.classList.add("modal-open");document.getElementById("close").focus()}
 document.querySelectorAll("#tabs button").forEach(t=>t.onclick=()=>show(t.dataset.v));
 zoom.onclick=()=>zoom.classList.toggle("z");
 const pan=(x,y)=>{const r=zoom.getBoundingClientRect();zimg.style.transformOrigin=Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"% "+Math.max(0,Math.min(100,(y-r.top)/r.height*100))+"%"};
 zoom.onmousemove=e=>{if(zoom.classList.contains("z"))pan(e.clientX,e.clientY)};
 zoom.addEventListener("touchmove",e=>{if(zoom.classList.contains("z")){pan(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault()}},{passive:false});
 buy.onclick=()=>{cart++;document.getElementById("cart").textContent=`🛍 Cart (${cart})`;buy.textContent="NAIDAGDAG ✓"};
-const shut=()=>m.classList.remove("on");
-close.onclick=shut;m.onclick=e=>{if(e.target==m)shut()};
-addEventListener("keydown",e=>{if(e.key=="Escape")shut()});
+document.getElementById("cart").addEventListener("click",()=>{if(cart)alert(`May ${cart} item(s) sa cart counter. Full cart at checkout ay susunod na feature.`);else alert("Wala pang item sa cart.")});
+const shut=()=>{if(!m.classList.contains("on"))return;m.classList.remove("on");m.setAttribute("aria-hidden","true");document.body.classList.remove("modal-open");if(previousFocus?.isConnected)previousFocus.focus();previousFocus=null};
+document.getElementById("close").addEventListener("click",shut);
+m.addEventListener("click",e=>{if(e.target===m)shut()});
+document.addEventListener("keydown",e=>{
+ if(!m.classList.contains("on"))return;
+ if(e.key==="Escape"){e.preventDefault();shut();return}
+ if(e.key!=="Tab")return;
+ const focusables=[...m.querySelectorAll('button:not([disabled]),[href],input:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(el=>el.getClientRects().length);
+ if(!focusables.length){e.preventDefault();return}
+ const first=focusables[0],last=focusables[focusables.length-1];
+ if(e.shiftKey&&(document.activeElement===first||!m.contains(document.activeElement))){e.preventDefault();last.focus()}
+ else if(!e.shiftKey&&(document.activeElement===last||!m.contains(document.activeElement))){e.preventDefault();first.focus()}
+});
 function pick(){if(!touch)return;const r=sc.getBoundingClientRect(),cx=r.left+r.width/2;let best=null,bd=1e9;items.forEach(b=>{const q=b.getBoundingClientRect(),d=Math.abs(q.left+q.width/2-cx);if(d<bd){bd=d;best=b}});setActive(bd<70?items.indexOf(best):-1)}
 if(touch){document.getElementById("hint").textContent="Mag-swipe sa rail · Tap para humarap, tap ulit para i-zoom";
- sc.addEventListener("scroll",()=>requestAnimationFrame(pick),{passive:true});
+ let pickScheduled=false;sc.addEventListener("scroll",()=>{if(pickScheduled)return;pickScheduled=true;requestAnimationFrame(()=>{pickScheduled=false;pick()})},{passive:true});
  addEventListener("load",()=>{const f=items[0];sc.scrollLeft=f.offsetLeft+f.offsetWidth/2-sc.clientWidth/2;pick()});}
 </script>
 </body>
