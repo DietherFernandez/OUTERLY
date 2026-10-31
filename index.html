@@ -90,6 +90,40 @@ body .item.is-facing .pic{filter:drop-shadow(7px 11px 12px rgba(67,42,22,.2)) dr
 .item .hk{transition:transform .82s cubic-bezier(.2,.72,.2,1)}
 .rack-nav:active{transform:scale(.96)}
 @media(prefers-reduced-motion:reduce){.item,.item .pic,.item .pic img,.item .hk{transition:none!important}}
+/* Photographic shadow pass: wall cast, hanger contact and fabric depth.
+   Shadows remain behind the product and never intercept interaction. */
+.stage.photo-ready .item{isolation:isolate}
+.stage.photo-ready .item::before{
+ content:"";position:absolute;pointer-events:none;
+ top:2.6cqw;left:50%;width:13.2cqw;height:23.5cqw;
+ border-radius:42% 47% 27% 30%;
+ background:rgba(63,38,21,.27);
+ filter:blur(1.5cqw);opacity:.68;
+ transform:translate3d(calc(-50% + 1.35cqw),.8cqw,0) scale(.96);
+ transform-origin:50% 5%;z-index:-1;
+ transition:transform .8s cubic-bezier(.2,.72,.2,1),opacity .8s ease;
+}
+.stage.photo-ready .item.is-facing::before{
+ opacity:.85;transform:translate3d(calc(-50% + 2.1cqw),1.25cqw,0) scale(1.1);
+}
+.stage.photo-ready .item .pic,
+.stage.photo-ready .item:hover .pic,
+.stage.photo-ready .item.on .pic,
+.stage.photo-ready .item:focus-visible .pic{
+ filter:drop-shadow(.22cqw .35cqw .34cqw rgba(59,36,19,.20))
+ drop-shadow(1.05cqw 1.6cqw 1.25cqw rgba(57,34,16,.19));
+ transition:filter .78s ease;
+}
+.stage.photo-ready .item.is-facing .pic{
+ filter:drop-shadow(.35cqw .55cqw .48cqw rgba(55,34,17,.24))
+ drop-shadow(1.45cqw 2.2cqw 1.7cqw rgba(51,30,14,.27));
+}
+.stage.photo-ready .item .hk,.stage.photo-ready .item .rs{
+ filter:drop-shadow(.1cqw .16cqw .14cqw rgba(48,29,13,.42));
+}
+@media(prefers-reduced-motion:reduce){
+ .stage.photo-ready .item::before{transition:none!important}
+}
 @media(max-width:700px){
 .showroom-overlay .showroom-header{padding:10px 14px}
 .showroom-overlay .logo{font-size:15px;letter-spacing:.22em}
