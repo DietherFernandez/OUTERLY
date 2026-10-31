@@ -284,6 +284,15 @@ body .item.is-facing .tag{opacity:1;transform:translate(-50%,-5px)}
  .thumb-product small{font-size:9px;max-width:60px}
  .rack-gallery .rack-nav{flex-shrink:0;width:38px;height:38px}
 }
+/* Gallery polish — keep hanger anchors stable. */
+@media(min-width:701px){.stage.photo-ready .item .pic{width:12.2cqw;margin-left:-6.05cqw}.stage.photo-ready .item .hk,.stage.photo-ready .item.is-facing .hk{transform:scale(.78);transform-origin:50% 0}.stage.photo-ready .item::before{width:9.5cqw;height:19.5cqw;opacity:.72}.stage.photo-ready .item .tag{font-size:11px}}
+.thumb-preview img,.stage.photo-ready .item .pic img,.zoom img{background:transparent}
+.product-thumbnails{gap:10px;padding:4px 2px;max-width:calc(100vw - 180px)}
+.thumb-product{flex-basis:116px;height:128px;border-radius:14px;background:rgba(255,255,255,.48);padding:8px 6px;gap:6px}
+.thumb-product:hover{transform:translateY(-1px)}
+.thumb-product.selected{border-color:#b47b43;background:rgba(255,252,246,.92);box-shadow:0 3px 12px rgba(114,73,36,.16)}
+.thumb-preview{height:88px;width:78px}
+@media(max-width:700px){.rack-gallery .product-thumbnails{gap:5px;max-width:calc(100vw - 165px)}.rack-gallery .thumb-product{flex-basis:66px;height:85px;padding:3px}.rack-gallery .thumb-preview{width:45px;height:58px}}
 </style>
 </head>
 <body>
@@ -342,13 +351,13 @@ function layoutRack(){
  items.forEach((b,i)=>{
   const slot=i-start,visible=slot>=0&&slot<slots;
   const spread=expandedIndex>=start&&expandedIndex<start+slots&&visible
-    ? (i<expandedIndex?-(mobile?4:1.4):i>expandedIndex?(mobile?4:1.4):0) : 0;
+    ? (i<expandedIndex?-(mobile?4:1.1):i>expandedIndex?(mobile?4:1.4):0) : 0;
   b.classList.toggle('is-hidden',!visible);
   b.classList.toggle('on',visible&&i===expandedIndex&&touch);
   b.classList.toggle('is-facing',visible&&i===expandedIndex);
   b.setAttribute('aria-pressed',String(visible&&i===expandedIndex));
   b.tabIndex=visible?0:-1;
-  const positions=mobile?[43,57]:P.map((_,k)=>24.3+k*5.8);
+  const positions=mobile?[43,57]:P.map((_,k)=>23.5+k*5.95);
   b.style.left=visible?positions[slot]+'%':'-100%';
   b.style.setProperty('--spread',spread+'cqw');
  });
