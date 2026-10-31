@@ -61,6 +61,18 @@ header{display:flex;justify-content:space-between;align-items:center;padding:13p
  .rack-controls{padding:9px 12px;gap:16px}
  .rack-nav{width:36px;height:36px;font-size:20px}
 }
+/* Final micro-polish: calm, coordinated motion with a stable silhouette. */
+.item{transition:transform .82s cubic-bezier(.2,.72,.2,1),opacity .28s ease}
+.item .pic img{transition:transform .82s cubic-bezier(.2,.72,.2,1),opacity .5s cubic-bezier(.25,.7,.25,1)}
+body .item .pic .s,body .item:hover:not(.is-facing) .pic .s,body .item:focus-visible:not(.is-facing) .pic .s,
+body .item .pic .f,body .item:hover:not(.is-facing) .pic .f,body .item:focus-visible:not(.is-facing) .pic .f{
+ transition:transform .82s cubic-bezier(.2,.72,.2,1),opacity .5s cubic-bezier(.25,.7,.25,1)
+}
+.item .pic{filter:drop-shadow(5px 9px 9px rgba(70,43,22,.16)) drop-shadow(12px 17px 15px rgba(60,37,20,.15))}
+body .item.is-facing .pic{filter:drop-shadow(7px 11px 12px rgba(67,42,22,.2)) drop-shadow(16px 24px 20px rgba(57,34,16,.24))}
+.item .hk{transition:transform .82s cubic-bezier(.2,.72,.2,1)}
+.rack-nav:active{transform:scale(.96)}
+@media(prefers-reduced-motion:reduce){.item,.item .pic,.item .pic img,.item .hk{transition:none!important}}
 @media(max-width:700px){
 .showroom-overlay .showroom-header{padding:10px 14px}
 .showroom-overlay .logo{font-size:15px;letter-spacing:.22em}
