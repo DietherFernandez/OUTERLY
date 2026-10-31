@@ -170,7 +170,8 @@ document.addEventListener("keydown",e=>{
 function pick(){if(!touch)return;const r=sc.getBoundingClientRect(),cx=r.left+r.width/2;let best=null,bd=1e9;items.forEach(b=>{const q=b.getBoundingClientRect(),d=Math.abs(q.left+q.width/2-cx);if(d<bd){bd=d;best=b}});setActive(bd<70?items.indexOf(best):-1)}
 if(touch){document.getElementById("hint").textContent="SWIPE PARA TUMINGIN · TAP PARA HUMARAP";document.getElementById("guide").textContent="Swipe the rack · Tap a jacket · Tap again to inspect";
  let pickScheduled=false;sc.addEventListener("scroll",()=>{if(pickScheduled)return;pickScheduled=true;requestAnimationFrame(()=>{pickScheduled=false;pick()})},{passive:true});
- addEventListener("load",()=>{const f=items[0];sc.scrollLeft=f.offsetLeft+f.offsetWidth/2-sc.clientWidth/2;pick()});}
+ const centerRack=()=>{sc.scrollLeft=Math.max(0,(sc.scrollWidth-sc.clientWidth)/2);pick()};
+ if(document.readyState==="complete")centerRack();else addEventListener("load",centerRack,{once:true});}
 </script>
 </body>
 </html>
