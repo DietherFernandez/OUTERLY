@@ -50,6 +50,20 @@ header{display:flex;justify-content:space-between;align-items:center;padding:13p
  transition:background .2s ease,box-shadow .2s ease
 }
 .showroom-overlay .cart:hover{background:rgba(210,189,151,.27);box-shadow:inset 1px 1px 2px rgba(84,60,34,.32),inset -1px -1px 1px rgba(255,249,225,.8)}
+/* Desktop showroom: fit complete wall and controls inside the visible browser viewport. */
+@media (min-width:701px){
+ html,body{height:100%;overflow:hidden}
+ body{height:100dvh;display:flex;flex-direction:column}
+ .showroom{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;background:#e9dcc7}
+ .showroom .scroller{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}
+ .showroom .stage{flex:none;width:min(100%,1600px,calc((100dvh - 133px)*1672/941));min-width:0;max-width:1600px;height:auto;aspect-ratio:1672/941}
+ .showroom-overlay{left:50%;right:auto;top:50%;width:min(100%,1600px,calc((100dvh - 133px)*1672/941));transform:translate(-50%,-50%);aspect-ratio:1672/941}
+ .rack-controls{flex:0 0 auto;padding:8px 12px;gap:16px}
+ .rack-nav{width:36px;height:36px;font-size:20px}
+ .shop-guide{flex:0 0 auto;padding:5px 14px 8px;font-size:11px}
+ .about{display:none}
+ footer{display:none}
+}
 @media(max-width:700px){
 .showroom-overlay .showroom-header{padding:10px 14px}
 .showroom-overlay .logo{font-size:15px;letter-spacing:.22em}
