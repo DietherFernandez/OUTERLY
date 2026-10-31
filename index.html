@@ -77,7 +77,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:13p
 .shop-guide .dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
 .stage:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(112deg,rgba(255,244,215,.10),transparent 45%,rgba(58,39,18,.06));z-index:0}
 .stage{container-type:inline-size;position:relative;width:100%;min-width:900px;max-width:1600px;margin:0 auto;aspect-ratio:1672/941;background:url(assets/wall-bg.jpg) center/100% 100%}
-.item{position:absolute;top:46.8%;width:7.5cqw;height:27.1cqw;margin-left:-3.75cqw;transition:left .8s cubic-bezier(.16,.82,.18,1),opacity .45s ease,filter .6s ease;border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font:inherit;transform-origin:50% 3.1%;perspective:1100px;animation:sway 6s ease-in-out infinite}
+.item{position:absolute;top:46.8%;width:7.5cqw;height:27.1cqw;margin-left:-3.75cqw;transition:left .8s cubic-bezier(.16,.82,.18,1),opacity .45s ease,filter .6s ease;border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font:inherit;transform-origin:50% 3.1%;perspective:1100px;animation:none}
 .item.on{width:18cqw;margin-left:-9cqw;filter:brightness(1.045)}
 .item:hover .pic,.item.on .pic{transform:translateY(-.55cqw) scale(1.015);filter:drop-shadow(3px 8px 8px rgba(75,49,22,.18)) drop-shadow(19px 30px 23px rgba(52,31,14,.34))}
 .item:hover .hk,.item.on .hk{transform:translateY(-.55cqw)}
@@ -235,14 +235,27 @@ function collapseRack(i){if(expandedIndex===i){expandedIndex=-1;layoutRack()}}
 P.forEach((j,i)=>{
  const b=document.createElement("button");b.className="item "+j.v;b.setAttribute("aria-label",`Inspect ${j.n}, ${fmt(j.p)}`);b.setAttribute("aria-pressed","false");b.type="button";
  b.innerHTML=`<svg class="hk hb" viewBox="0 0 600 400"><path d="M300 52C262 52 258 88 264 118C268 142 288 156 299 176" fill="none" stroke="#6b6964" stroke-width="14" stroke-linecap="round"/></svg><i class="rs"></i><div class="pic"><img class="s" src="${IMG.s}" alt=""><img class="f" src="${IMG.f}" alt=""></div><svg class="hk hf" viewBox="0 0 600 400"><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#8e8c86" stroke-width="14" stroke-linecap="round"/><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#e4e0d6" stroke-width="4.5" stroke-linecap="round" transform="translate(-2 -1)"/></svg><div class="tag"><b>${j.n}</b><span>${fmt(j.p)}</span></div>`;
- b.style.left=XS[Math.min(i,3)]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i%4]);b.style.animationDuration=[5.6,6.6,6,7][i%4]+'s';if(!touch){
- b.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch'&&!b.classList.contains('is-hidden'))expandRack(i)});
- b.addEventListener('pointerleave',e=>{if(e.pointerType!=='touch')collapseRack(i)});
+ b.style.left=XS[Math.min(i,3)]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i%4]);if(!touch){
  b.addEventListener('focus',()=>{if(!b.classList.contains('is-hidden'))expandRack(i)});
  b.addEventListener('blur',()=>collapseRack(i));
 }
 b.onclick=()=>{if(touch){if(expandedIndex!==i){expandRack(i);return}open(j);return}open(j)};stage.appendChild(b)});
 setActive(0);
+/* Stable hover zones use original rail positions, not moving element boundaries. */
+if(!touch){
+ stage.addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch')return;
+  const r=stage.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;
+  if(y<46||y>90){if(expandedIndex!==-1){expandedIndex=-1;layoutRack()}return}
+  const start=Math.max(0,Math.min(P.length-4,currentIndex-1));
+  let slot=-1,distance=Infinity;
+  XS.forEach((pos,k)=>{const d=Math.abs(x-pos);if(d<distance){distance=d;slot=k}});
+  const chosen=distance<=5.2?start+slot:-1;
+  if(chosen!==expandedIndex){expandedIndex=chosen;layoutRack()}
+ },{passive:true});
+ stage.addEventListener('pointerleave',()=>{if(expandedIndex!==-1){expandedIndex=-1;layoutRack()}});
+}
 function navigate(step){setActive((currentIndex+step+P.length)%P.length);if(narrowScreen.matches)centerRack(true)}
 document.getElementById("rack-prev").addEventListener("click",()=>navigate(-1));
 document.getElementById("rack-next").addEventListener("click",()=>navigate(1));
