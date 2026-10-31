@@ -148,11 +148,6 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 <section class="showroom" aria-label="Interactive boutique clothing rail">
   <div class="showroom-overlay">
     <header class="showroom-header"><div class="logo">OUTERLY</div><button class="cart" id="cart" type="button">🛍 Cart (0)</button></header>
-    <div class="hero">
-      <h1>Jackets na bagay sa bawat mood.</h1>
-      <p>Pasyal ka sa aming rack — walang pila, walang pressure.</p>
-      <span class="hint" id="hint">Hover para humarap · Pindot para i-zoom</span>
-    </div>
   </div>
   <main class="scroller" aria-label="Swipe or scroll the jackets"><div class="stage" id="stage"></div></main>
 </section>
@@ -252,7 +247,7 @@ document.addEventListener("keydown",e=>{
  else if(!e.shiftKey&&(document.activeElement===last||!m.contains(document.activeElement))){e.preventDefault();first.focus()}
 });
 function pick(){if(!touch)return;/* active carousel item remains stable during horizontal wall panning */}
-if(touch){document.getElementById("hint").textContent="SWIPE PARA TUMINGIN · TAP PARA HUMARAP";document.getElementById("guide").textContent="Swipe the rack · Tap a jacket · Tap again to inspect";
+if(touch){document.getElementById("guide").textContent="Swipe the rack · Tap a jacket · Tap again to inspect";
  let pickScheduled=false;sc.addEventListener("scroll",()=>{if(pickScheduled)return;pickScheduled=true;requestAnimationFrame(()=>{pickScheduled=false;pick()})},{passive:true});
 }
 const narrowScreen=matchMedia("(max-width:700px)");
