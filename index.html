@@ -169,23 +169,34 @@ const fmt=n=>"₱"+n.toLocaleString("en-PH");
 const stage=document.getElementById("stage"),XS=[39.75,47.25,54.75,62.25],items=[],touch=matchMedia('(hover:none)').matches,sc=document.querySelector('.scroller'),reducedMotion=matchMedia('(prefers-reduced-motion:reduce)').matches;
 let currentIndex=0;
 const count=document.getElementById("rack-count");
-function setActive(k){
- if(k>=0)currentIndex=k;
+let expandedIndex=-1;
+function layoutRack(){
  const start=Math.max(0,Math.min(P.length-4,currentIndex-1));
  items.forEach((b,i)=>{
-  const slot=i-start,visible=slot>=0&&slot<4,active=i===currentIndex;
+  const slot=i-start,visible=slot>=0&&slot<4;
+  const spread=expandedIndex>=start&&expandedIndex<start+4&&visible
+    ? (i<expandedIndex?-5.2:i>expandedIndex?5.2:0) : 0;
   b.classList.toggle('is-hidden',!visible);
-  b.classList.toggle('on',false);
-  b.setAttribute('aria-pressed',String(active));
+  b.classList.toggle('on',visible&&i===expandedIndex&&touch);
+  b.setAttribute('aria-pressed',String(visible&&i===expandedIndex));
   b.tabIndex=visible?0:-1;
-  b.style.left=visible?(XS[slot]+(active?0:i<currentIndex?-3:3))+'%':'-100%';
+  b.style.left=visible?(XS[slot]+spread)+'%':'-100%';
  });
  count.textContent=(currentIndex+1)+' / '+P.length;
 }
+function setActive(k){if(k>=0)currentIndex=k;expandedIndex=-1;layoutRack()}
+function expandRack(i){expandedIndex=i;layoutRack()}
+function collapseRack(i){if(expandedIndex===i){expandedIndex=-1;layoutRack()}}
 P.forEach((j,i)=>{
  const b=document.createElement("button");b.className="item "+j.v;b.setAttribute("aria-label",`Inspect ${j.n}, ${fmt(j.p)}`);b.setAttribute("aria-pressed","false");b.type="button";
  b.innerHTML=`<svg class="hk hb" viewBox="0 0 600 400"><path d="M300 52C262 52 258 88 264 118C268 142 288 156 299 176" fill="none" stroke="#6b6964" stroke-width="14" stroke-linecap="round"/></svg><i class="rs"></i><div class="pic"><img class="s" src="${IMG.s}" alt=""><img class="f" src="${IMG.f}" alt=""></div><svg class="hk hf" viewBox="0 0 600 400"><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#8e8c86" stroke-width="14" stroke-linecap="round"/><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#e4e0d6" stroke-width="4.5" stroke-linecap="round" transform="translate(-2 -1)"/></svg><div class="tag"><b>${j.n}</b><span>${fmt(j.p)}</span></div>`;
- b.style.left=XS[Math.min(i,3)]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i%4]);b.style.animationDuration=[5.6,6.6,6,7][i%4]+'s';/* Hover is visual-only; selection changes only through deliberate click or navigation. */b.onclick=()=>{if(touch){if(!b.classList.contains('on')){items.forEach(el=>el.classList.remove('on'));b.classList.add('on');return}open(j);return}open(j)};stage.appendChild(b)});
+ b.style.left=XS[Math.min(i,3)]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i%4]);b.style.animationDuration=[5.6,6.6,6,7][i%4]+'s';if(!touch){
+ b.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch'&&!b.classList.contains('is-hidden'))expandRack(i)});
+ b.addEventListener('pointerleave',e=>{if(e.pointerType!=='touch')collapseRack(i)});
+ b.addEventListener('focus',()=>{if(!b.classList.contains('is-hidden'))expandRack(i)});
+ b.addEventListener('blur',()=>collapseRack(i));
+}
+b.onclick=()=>{if(touch){if(expandedIndex!==i){expandRack(i);return}open(j);return}open(j)};stage.appendChild(b)});
 setActive(0);
 function navigate(step){setActive((currentIndex+step+P.length)%P.length);if(narrowScreen.matches)centerRack(true)}
 document.getElementById("rack-prev").addEventListener("click",()=>navigate(-1));
