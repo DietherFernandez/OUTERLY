@@ -50,22 +50,16 @@ header{display:flex;justify-content:space-between;align-items:center;padding:13p
  transition:background .2s ease,box-shadow .2s ease
 }
 .showroom-overlay .cart:hover{background:rgba(210,189,151,.27);box-shadow:inset 1px 1px 2px rgba(84,60,34,.32),inset -1px -1px 1px rgba(255,249,225,.8)}
-/* Desktop showroom: fit complete wall and controls inside the visible browser viewport. */
+/* Preserve the boutique photograph's true proportions on desktop. */
 @media (min-width:701px){
- html,body{height:100%;overflow:hidden}
- body{height:100dvh;display:flex;flex-direction:column}
- .showroom{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;background:#e9dcc7}
- .showroom .scroller{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}
- .showroom .stage{flex:none;width:100%;min-width:0;max-width:none;height:100%;aspect-ratio:auto;background-size:100% 100%}
- .showroom-overlay{left:0;right:0;top:0;width:100%;height:auto;transform:none;aspect-ratio:auto}
- /* Preserve hanger alignment while keeping product silhouettes inside shorter viewports. */
- .showroom .item{top:46.8%;height:min(27.1cqw,45cqh)}
- .showroom .pic{width:min(20cqw,32cqh);margin-left:calc(-1 * min(9.9cqw,15.84cqh))}
- .rack-controls{flex:0 0 auto;padding:8px 12px;gap:16px}
+ html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
+ body{display:block}
+ .showroom{display:block;background:#e9dcc7}
+ .showroom .scroller{display:block;width:100%;height:auto;overflow-x:auto;overflow-y:hidden}
+ .showroom .stage{position:relative;width:100%;max-width:1600px;min-width:900px;height:auto;aspect-ratio:1672/941;background-size:100% 100%;margin:0 auto}
+ .showroom-overlay{left:50%;right:auto;top:0;width:min(100%,1600px);height:auto;transform:translateX(-50%);aspect-ratio:auto}
+ .rack-controls{padding:9px 12px;gap:16px}
  .rack-nav{width:36px;height:36px;font-size:20px}
- .shop-guide{flex:0 0 auto;padding:5px 14px 8px;font-size:11px}
- .about{display:none}
- footer{display:none}
 }
 @media(max-width:700px){
 .showroom-overlay .showroom-header{padding:10px 14px}
