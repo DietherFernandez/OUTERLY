@@ -83,11 +83,15 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .x{position:absolute;top:12px;right:18px;background:none;border:0;font-size:32px;color:#fff;cursor:pointer}
 @media(max-width:700px){
 .scroller{-webkit-overflow-scrolling:touch}
-.stage{min-width:1100px}
+/* Mobile window-shopping framing: center the full jacket collection, not a zoomed wall crop */
+.stage{min-width:800px;margin-top:0}
+.scroller{scrollbar-width:none}
+.scroller::-webkit-scrollbar{display:none}
+.showroom{overflow:hidden}
 .shop-guide{font-size:11px;padding:10px 12px;gap:8px}
 .shop-guide .dot{flex-shrink:0}
 .tag b{font-size:15px}.tag span{font-size:14px}
-.hero{padding:4px 6vw 12px}.hero h1{font-size:24px;margin:0 0 6px}.hero p{display:none}.hint{font-size:11px;margin-top:0}.stage{margin-top:-3%}
+.hero{padding:4px 6vw 12px}.hero h1{font-size:24px;margin:0 0 6px}.hero p{display:none}.hint{font-size:11px;margin-top:0}.stage{margin-top:0}
 .modal{align-items:flex-end;padding:0}
 .panel{grid-template-columns:1fr;border-radius:22px 22px 0 0;max-height:92vh;animation:sheet .35s ease-out}
 @keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
@@ -171,7 +175,8 @@ function pick(){if(!touch)return;const r=sc.getBoundingClientRect(),cx=r.left+r.
 if(touch){document.getElementById("hint").textContent="SWIPE PARA TUMINGIN · TAP PARA HUMARAP";document.getElementById("guide").textContent="Swipe the rack · Tap a jacket · Tap again to inspect";
  let pickScheduled=false;sc.addEventListener("scroll",()=>{if(pickScheduled)return;pickScheduled=true;requestAnimationFrame(()=>{pickScheduled=false;pick()})},{passive:true});
  const centerRack=()=>{sc.scrollLeft=Math.max(0,(sc.scrollWidth-sc.clientWidth)/2);pick()};
- if(document.readyState==="complete")centerRack();else addEventListener("load",centerRack,{once:true});}
+ if(document.readyState==="complete")centerRack();else addEventListener("load",centerRack,{once:true});
+ addEventListener("resize",centerRack,{passive:true});}
 </script>
 </body>
 </html>
