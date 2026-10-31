@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fil">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OUTERLY — Jacket Boutique</title>
+<style>
+:root{--bg:#f4eee4;--ink:#2a231c;--mute:#7d7266;--card:#fffaf2;--accent:#a8602f;--wall:#d6c6b0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1a16;--ink:#f2ebe0;--mute:#a89d8f;--card:#2a2621;--accent:#e0925f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1e1a16;--ink:#f2ebe0;--mute:#a89d8f;--card:#2a2621;--accent:#e0925f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Helvetica Neue',Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;padding:16px 5vw}
+.logo{font-family:Georgia,serif;letter-spacing:.35em;font-size:20px;font-weight:700}
+.cart{border:1px solid var(--ink);padding:8px 16px;border-radius:99px;font-size:13px;background:none;color:var(--ink);cursor:pointer}
+.hero{text-align:center;padding:20px 5vw 26px}
+.hero h1{font-family:Georgia,serif;font-size:clamp(28px,5.5vw,50px);margin:0 0 8px;font-weight:400}
+.hero p{color:var(--mute);margin:0;font-size:15px}
+.hint{display:inline-block;margin-top:12px;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}
+.scroller{overflow-x:auto;background:#e9dcc7}
+.stage{container-type:inline-size;position:relative;width:100%;min-width:900px;max-width:1600px;margin:0 auto;aspect-ratio:1672/941;background:url(assets/wall-bg.jpg) center/100% 100%}
+.item{position:absolute;top:46.8%;width:7.5cqw;height:27.1cqw;margin-left:-3.75cqw;transition:left .55s cubic-bezier(.2,.8,.2,1);border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font:inherit;transform-origin:50% 3.1%;perspective:1100px;animation:sway 6s ease-in-out infinite}
+.item.on{width:18cqw;margin-left:-9cqw}
+.item:nth-child(2){animation-delay:-1.5s}.item:nth-child(3){animation-delay:-3s}.item:nth-child(4){animation-delay:-4.5s}
+.item:focus-visible,.item.on{animation-play-state:paused;z-index:5}
+@keyframes sway{0%,100%{transform:rotate(calc(var(--r,0deg) - .8deg))}50%{transform:rotate(calc(var(--r,0deg) + .8deg))}}
+.pic{z-index:3;pointer-events:none;position:absolute;left:50%;top:0;margin-left:-9.9cqw;width:20cqw;aspect-ratio:720/975;filter:drop-shadow(16px 20px 12px rgba(90,55,25,.32))}
+.pic img{position:absolute;inset:0;width:100%;height:100%;transform-origin:49.5% 2%;backface-visibility:hidden}
+.pic .f{transform:rotateY(-90deg)}
+.item:focus-visible .s,.item.on .s{transform:rotateY(90deg);transition:transform .3s ease-in}
+.item:focus-visible .f,.item.on .f{transform:rotateY(0);transition:transform .45s .27s cubic-bezier(.2,.9,.3,1)}
+.s{transition:transform .35s .1s}.f{transition:transform .25s}
+.hk{position:absolute;left:50%;top:-.16cqw;width:6cqw;height:4cqw;margin-left:-3cqw;overflow:visible;pointer-events:none}.hb{z-index:1}.hf{z-index:4;filter:drop-shadow(.08cqw .12cqw .06cqw rgba(60,35,15,.4))}
+.rs{position:absolute;left:50%;top:.39cqw;width:1.8cqw;height:.9cqw;margin-left:-.9cqw;z-index:2;pointer-events:none;background:linear-gradient(to bottom,#644114 0.0% 6.7%,#7b5523 6.7% 13.3%,#9e7944 13.3% 20.0%,#9c7847 20.0% 26.7%,#9c7849 26.7% 33.3%,#9a7747 33.3% 40.0%,#8b6737 40.0% 46.7%,#7d5725 46.7% 53.3%,#8c642f 53.3% 60.0%,#ba9259 60.0% 66.7%,#c7a068 66.7% 73.3%,#c69f67 73.3% 80.0%,#b1884d 80.0% 86.7%,#976b31 86.7% 93.3%,#784f20 93.3% 100.0%);-webkit-mask-image:linear-gradient(to right,transparent,#000 25%,#000 75%,transparent);mask-image:linear-gradient(to right,transparent,#000 25%,#000 75%,transparent)}
+.tag{z-index:6;position:absolute;top:100%;left:50%;transform:translateX(-50%);width:max-content;text-align:center;margin-top:4px;text-shadow:0 1px 2px rgba(255,245,230,.8);font-size:12px;opacity:0;transition:.3s}
+.item:focus-visible .tag,.item.on .tag{opacity:1}
+.tag b{display:block;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#2a231c}
+.tag span{color:#6b5a48}
+.v2 img,img.v2{filter:hue-rotate(78deg) saturate(.55) brightness(1.08)}
+.v3 img,img.v3{filter:hue-rotate(185deg) saturate(.45) brightness(.82)}
+.v4 img,img.v4{filter:hue-rotate(-18deg) saturate(1.15) brightness(1.22)}
+.about{max-width:760px;margin:0 auto;padding:46px 5vw;text-align:center;color:var(--mute);line-height:1.7}
+.about h2{color:var(--ink);font-family:Georgia,serif;font-weight:400;font-size:28px}
+footer{text-align:center;padding:22px;font-size:12px;color:var(--mute)}
+.modal{position:fixed;inset:0;background:rgba(18,13,9,.72);display:none;align-items:center;justify-content:center;padding:14px;z-index:50;backdrop-filter:blur(4px)}
+.modal.on{display:flex}
+.panel{background:var(--card);border-radius:20px;max-width:960px;width:100%;max-height:94vh;overflow:auto;display:grid;grid-template-columns:1.15fr 1fr;animation:zoom .45s cubic-bezier(.2,.9,.2,1.1)}
+@keyframes zoom{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.view{background:radial-gradient(circle at 50% 35%,#f1e8d9,#d6c6b0);display:flex;flex-direction:column;align-items:center;padding:14px}
+.zoom{touch-action:manipulation;width:100%;aspect-ratio:720/975;overflow:hidden;cursor:zoom-in;border-radius:12px}
+.zoom.z{cursor:zoom-out}
+.zoom img{width:100%;height:100%;transition:transform .35s;transform-origin:50% 30%}
+.zoom.z img{transform:scale(2.1)}
+.tabs{display:flex;gap:8px;margin-top:12px}
+.tabs button{padding:7px 18px;border-radius:99px;border:1px solid #6b5a48;background:none;color:#2a231c;cursor:pointer;font-size:13px}
+.tabs button.on{background:#2a231c;color:#f4eee4}
+.info{padding:30px}
+.info h3{font-family:Georgia,serif;font-size:28px;margin:0 0 6px;font-weight:400}
+.price{color:var(--accent);font-size:22px;margin-bottom:12px}
+.info p{color:var(--mute);line-height:1.6;font-size:14px}
+.sizes{display:flex;gap:8px;margin:16px 0}
+.sizes button{width:42px;height:42px;border-radius:50%;border:1px solid var(--mute);background:none;color:var(--ink);cursor:pointer}
+.sizes button.on{background:var(--ink);color:var(--card)}
+.buy{width:100%;padding:14px;border:0;border-radius:99px;background:var(--accent);color:#fff;font-size:14px;letter-spacing:.1em;cursor:pointer}
+.x{position:absolute;top:12px;right:18px;background:none;border:0;font-size:32px;color:#fff;cursor:pointer}
+@media(max-width:700px){
+.scroller{-webkit-overflow-scrolling:touch}
+.stage{min-width:1300px}
+.tag b{font-size:15px}.tag span{font-size:14px}
+.hero{padding:4px 6vw 12px}.hero h1{font-size:24px;margin:0 0 6px}.hero p{display:none}.hint{font-size:11px;margin-top:0}.stage{margin-top:-3%}
+.modal{align-items:flex-end;padding:0}
+.panel{grid-template-columns:1fr;border-radius:22px 22px 0 0;max-height:92vh;animation:sheet .35s ease-out}
+@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
+.view{padding:12px 12px 8px}.zoom{height:46vh;width:auto;max-width:100%}
+.tabs button{padding:10px 22px;font-size:14px}
+.info{padding:16px 18px 0}.info h3{font-size:24px}
+.sizes button{width:48px;height:48px;font-size:15px}
+.buy{position:sticky;bottom:0;padding:16px;margin-bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px var(--card)}
+.x{top:10px;right:12px;z-index:2;color:#2a231c;background:rgba(255,250,242,.9);border-radius:50%;width:40px;height:40px;font-size:26px;line-height:1;padding:0}
+}
+</style>
+</head>
+<body>
+<header><div class="logo">OUTERLY</div><button class="cart" id="cart">🛍 Cart (0)</button></header>
+<section class="hero">
+  <h1>Jackets na bagay sa bawat mood.</h1>
+  <p>Pasyal ka sa aming rack — walang pila, walang pressure.</p>
+  <span class="hint" id="hint">Hover para humarap · Pindot para i-zoom</span>
+</section>
+<main class="scroller"><div class="stage" id="stage"></div></main>
+<section class="about">
+  <h2>Bakit Outerly?</h2>
+  <p>Curated na jackets para sa Pinoy weather at Pinoy style — magaan, matibay, at presentable mula sa mall hanggang sa mountain trip. Libreng shipping sa orders na ₱3,000 pataas.</p>
+</section>
+<footer>© 2026 Outerly. Lahat ng karapatan ay nakalaan.</footer>
+
+<div class="modal" id="modal"><button class="x" id="close" aria-label="Isara">×</button>
+  <div class="panel">
+    <div class="view"><div class="zoom" id="zoom"><img id="zimg" alt=""></div>
+      <div class="tabs" id="tabs"><button data-v="f" class="on">Front</button><button data-v="b">Back</button><button data-v="s">Side</button></div></div>
+    <div class="info"><h3 id="mn"></h3><div class="price" id="mp"></div><p id="md"></p>
+      <div class="sizes" id="sz"></div><button class="buy" id="buy">IDAGDAG SA CART</button></div>
+  </div>
+</div>
+
+<script>
+const IMG={s:"assets/jacket-side.webp",f:"assets/jacket-front.webp",b:"assets/jacket-back.webp"};
+const P=[
+{n:"Cocoa Zip Hoodie",p:1999,v:"",d:"Heavyweight fleece zip hoodie sa cocoa brown. Oversized fit, ribbed cuffs at hem, may drawstring hood at kangaroo pockets. Malambot at hindi nagpa-pilling."},
+{n:"Sage Zip Hoodie",p:1999,v:"v2",d:"Preview colorway: parehong cut ng Cocoa, sa mas malamig na sage tone."},
+{n:"Slate Zip Hoodie",p:2199,v:"v3",d:"Preview colorway: dark slate para sa mas clean at minimal na look."},
+{n:"Rosé Zip Hoodie",p:1999,v:"v4",d:"Preview colorway: soft rosé na bagay sa aesthetic na ootd."}
+];
+const fmt=n=>"₱"+n.toLocaleString("en-PH");
+const stage=document.getElementById("stage"),XS=[39.75,47.25,54.75,62.25],items=[],touch=matchMedia('(hover:none)').matches,sc=document.querySelector('.scroller');
+function setActive(k){items.forEach((b,i)=>{b.classList.toggle('on',i===k);b.style.left=(XS[i]+(k<0||i===k?0:i<k?-6:6))+'%'})}
+P.forEach((j,i)=>{
+ const b=document.createElement("button");b.className="item "+j.v;b.setAttribute("aria-label",j.n);
+ b.innerHTML=`<svg class="hk hb" viewBox="0 0 600 400"><path d="M300 52C262 52 258 88 264 118C268 142 288 156 299 176" fill="none" stroke="#6b6964" stroke-width="14" stroke-linecap="round"/></svg><i class="rs"></i><div class="pic"><img class="s" src="${IMG.s}" alt=""><img class="f" src="${IMG.f}" alt=""></div><svg class="hk hf" viewBox="0 0 600 400"><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#8e8c86" stroke-width="14" stroke-linecap="round"/><path d="M300 52C338 52 342 88 336 118C332 142 312 156 301 176L300 263" fill="none" stroke="#e4e0d6" stroke-width="4.5" stroke-linecap="round" transform="translate(-2 -1)"/></svg><div class="tag"><b>${j.n}</b><span>${fmt(j.p)}</span></div>`;
+ b.style.left=XS[i]+'%';items.push(b);b.style.setProperty('--r',['-1.3deg','.7deg','-.6deg','1.2deg'][i]);b.style.animationDuration=[5.6,6.6,6,7][i]+'s';if(!touch){b.addEventListener('pointerenter',()=>setActive(i));b.addEventListener('pointerleave',()=>setActive(-1))}b.onclick=()=>{if(touch&&!b.classList.contains('on')){setActive(i);b.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});return}open(j)};stage.appendChild(b)});
+let cart=0,size="M";
+const m=document.getElementById("modal"),zoom=document.getElementById("zoom"),zimg=document.getElementById("zimg");
+function show(v){zimg.src=IMG[v];zoom.classList.remove("z");document.querySelectorAll("#tabs button").forEach(t=>t.classList.toggle("on",t.dataset.v==v))}
+function open(j){zoom.className="zoom";zimg.className=j.v;show("f");
+ mn.textContent=j.n;mp.textContent=fmt(j.p);md.textContent=j.d;
+ sz.innerHTML=["S","M","L","XL"].map(s=>`<button class="${s==size?"on":""}">${s}</button>`).join("");
+ sz.querySelectorAll("button").forEach(bt=>bt.onclick=()=>{size=bt.textContent;sz.querySelectorAll("button").forEach(o=>o.classList.toggle("on",o==bt))});
+ buy.textContent="IDAGDAG SA CART";m.classList.add("on")}
+document.querySelectorAll("#tabs button").forEach(t=>t.onclick=()=>show(t.dataset.v));
+zoom.onclick=()=>zoom.classList.toggle("z");
+const pan=(x,y)=>{const r=zoom.getBoundingClientRect();zimg.style.transformOrigin=Math.max(0,Math.min(100,(x-r.left)/r.width*100))+"% "+Math.max(0,Math.min(100,(y-r.top)/r.height*100))+"%"};
+zoom.onmousemove=e=>{if(zoom.classList.contains("z"))pan(e.clientX,e.clientY)};
+zoom.addEventListener("touchmove",e=>{if(zoom.classList.contains("z")){pan(e.touches[0].clientX,e.touches[0].clientY);e.preventDefault()}},{passive:false});
+buy.onclick=()=>{cart++;document.getElementById("cart").textContent=`🛍 Cart (${cart})`;buy.textContent="NAIDAGDAG ✓"};
+const shut=()=>m.classList.remove("on");
+close.onclick=shut;m.onclick=e=>{if(e.target==m)shut()};
+addEventListener("keydown",e=>{if(e.key=="Escape")shut()});
+function pick(){if(!touch)return;const r=sc.getBoundingClientRect(),cx=r.left+r.width/2;let best=null,bd=1e9;items.forEach(b=>{const q=b.getBoundingClientRect(),d=Math.abs(q.left+q.width/2-cx);if(d<bd){bd=d;best=b}});setActive(bd<70?items.indexOf(best):-1)}
+if(touch){document.getElementById("hint").textContent="Mag-swipe sa rail · Tap para humarap, tap ulit para i-zoom";
+ sc.addEventListener("scroll",()=>requestAnimationFrame(pick),{passive:true});
+ addEventListener("load",()=>{const f=items[0];sc.scrollLeft=f.offsetLeft+f.offsetWidth/2-sc.clientWidth/2;pick()});}
+</script>
+</body>
+</html>
