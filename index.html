@@ -20,6 +20,24 @@ header{display:flex;justify-content:space-between;align-items:center;padding:13p
 .hint{display:inline-block;margin-top:12px;font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}
 .scroller{overflow-x:auto;background:#e9dcc7;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#ac9374 transparent}
 .showroom{position:relative}
+.showroom-overlay{position:absolute;inset:0 0 auto;z-index:10;pointer-events:none;color:#30251b;background:linear-gradient(180deg,rgba(249,242,230,.94) 0%,rgba(249,242,230,.83) 44%,rgba(249,242,230,.42) 79%,transparent 100%);padding-bottom:clamp(12px,2.5vw,34px)}
+.showroom-overlay .showroom-header{display:flex;align-items:center;justify-content:space-between;padding:clamp(12px,1.5vw,22px) clamp(18px,4vw,64px);background:transparent;backdrop-filter:none}
+.showroom-overlay .logo{font-size:clamp(15px,1.7vw,21px);letter-spacing:.3em}
+.showroom-overlay .cart{pointer-events:auto;background:rgba(255,250,242,.72);border-color:rgba(65,43,24,.32);color:#30251b;font-size:12px;backdrop-filter:blur(9px)}
+.showroom-overlay .hero{padding:clamp(3px,1.2vw,14px) 18px 0;text-align:center}
+.showroom-overlay .hero h1{font-size:clamp(21px,3vw,37px);line-height:1.13;margin-bottom:7px;color:#30251b}
+.showroom-overlay .hero p{font-size:clamp(11px,1.1vw,14px);color:#695849}
+.showroom-overlay .hero .hint{margin-top:8px;font-size:clamp(9px,.8vw,11px);letter-spacing:.1em;color:#8f532a}
+@media(max-width:700px){
+.showroom-overlay .showroom-header{padding:10px 14px}
+.showroom-overlay .logo{font-size:15px;letter-spacing:.22em}
+.showroom-overlay .cart{padding:7px 11px;font-size:11px}
+.showroom-overlay .hero{padding:5px 14px 0}
+.showroom-overlay .hero h1{font-size:clamp(18px,5vw,24px);max-width:340px;margin:0 auto 5px}
+.showroom-overlay .hero p{display:block;font-size:11px;line-height:1.35;max-width:320px;margin:0 auto}
+.showroom-overlay .hero .hint{font-size:9px;margin-top:6px;letter-spacing:.025em}
+.showroom-overlay{padding-bottom:20px}
+}
 .showroom:after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 55px rgba(48,30,14,.09)}
 .shop-guide{display:flex;align-items:center;justify-content:center;gap:14px;padding:12px 5vw 14px;background:var(--bg);color:var(--mute);font-size:12px;letter-spacing:.04em}
 .shop-guide strong{color:var(--ink);font-weight:500}
@@ -127,13 +145,17 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 </style>
 </head>
 <body>
-<header><div class="logo">OUTERLY</div><button class="cart" id="cart">🛍 Cart (0)</button></header>
-<section class="hero">
-  <h1>Jackets na bagay sa bawat mood.</h1>
-  <p>Pasyal ka sa aming rack — walang pila, walang pressure.</p>
-  <span class="hint" id="hint">Hover para humarap · Pindot para i-zoom</span>
+<section class="showroom" aria-label="Interactive boutique clothing rail">
+  <div class="showroom-overlay">
+    <header class="showroom-header"><div class="logo">OUTERLY</div><button class="cart" id="cart" type="button">🛍 Cart (0)</button></header>
+    <div class="hero">
+      <h1>Jackets na bagay sa bawat mood.</h1>
+      <p>Pasyal ka sa aming rack — walang pila, walang pressure.</p>
+      <span class="hint" id="hint">Hover para humarap · Pindot para i-zoom</span>
+    </div>
+  </div>
+  <main class="scroller" aria-label="Swipe or scroll the jackets"><div class="stage" id="stage"></div></main>
 </section>
-<section class="showroom" aria-label="Interactive boutique clothing rail"><main class="scroller" aria-label="Swipe or scroll the jackets"><div class="stage" id="stage"></div></main></section>
 <nav class="rack-controls" aria-label="Browse jackets"><button class="rack-nav" id="rack-prev" type="button" aria-label="Previous jacket">‹</button><output class="rack-count" id="rack-count" aria-live="polite">1 / 10</output><button class="rack-nav" id="rack-next" type="button" aria-label="Next jacket">›</button></nav>
 <div class="shop-guide"><strong>THE OUTERLY RACK</strong><span class="dot"></span><span id="guide">Explore the collection · Hover to reveal · Click to inspect</span></div>
 <section class="about">
