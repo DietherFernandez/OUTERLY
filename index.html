@@ -299,7 +299,7 @@ function productAsset(j,view){return availableAssets.has(j.id+":"+view)?j.images
 function preloadAssets(){
  P.forEach((j,index)=>VIEWS.forEach(view=>{
   const img=new Image();
-  img.onload=()=>{availableAssets.add(j.id+":"+view);document.querySelectorAll('[data-product="'+j.id+'"][data-view="'+view+'"]').forEach(el=>{el.src=j.images[view];el.classList.remove(j.v)});if(activeProduct===j&&activeView===view){zimg.src=j.images[view];zimg.className=""}};
+  img.onload=()=>{availableAssets.add(j.id+":"+view);document.querySelectorAll('[data-product="'+j.id+'"][data-view="'+view+'"]').forEach(el=>{el.src=j.images[view];el.style.filter="none"});if(activeProduct===j&&activeView===view){zimg.src=j.images[view];zimg.className=""}};
   img.onerror=()=>{};
   img.src=j.images[view];
  }));
