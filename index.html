@@ -245,6 +245,18 @@ body .item.is-facing .tag{opacity:1;transform:translate(-50%,-5px)}
 .buy{position:sticky;bottom:0;padding:16px;margin-bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px var(--card)}
 .x{top:10px;right:12px;z-index:2;color:#2a231c;background:rgba(255,250,242,.9);border-radius:50%;width:40px;height:40px;font-size:26px;line-height:1;padding:0}
 }
+/* Mobile boutique close-up: two readable jackets and the central rail. */
+@media(max-width:700px){
+ .showroom .scroller{height:clamp(400px,73dvh,640px);overflow-x:auto;overflow-y:hidden}
+ .stage.photo-ready{margin-top:-142px;min-width:640px;width:640px;aspect-ratio:941/1672}
+ .stage.photo-ready .item{top:35.9%}
+ .stage.photo-ready .item .pic{width:27cqw;margin-left:-13.365cqw}
+ .stage.photo-ready .item::before{width:19cqw;height:31cqw}
+ .stage:not(.photo-ready){min-width:800px}
+ .stage:not(.photo-ready) .item .pic{width:23cqw;margin-left:-11.385cqw}
+ .rack-controls{position:sticky;bottom:0;z-index:12;padding:10px 14px max(10px,env(safe-area-inset-bottom))}
+ .rack-nav{width:44px;height:44px}
+}
 </style>
 </head>
 <body>
@@ -286,17 +298,19 @@ let currentIndex=0;
 const count=document.getElementById("rack-count");
 let expandedIndex=-1;
 function layoutRack(){
- const start=Math.max(0,Math.min(P.length-4,currentIndex-1));
+ const mobile=matchMedia("(max-width:700px)").matches;
+ const slots=mobile?2:4;
+ const start=Math.max(0,Math.min(P.length-slots,currentIndex-(mobile?0:1)));
  items.forEach((b,i)=>{
-  const slot=i-start,visible=slot>=0&&slot<4;
-  const spread=expandedIndex>=start&&expandedIndex<start+4&&visible
+  const slot=i-start,visible=slot>=0&&slot<slots;
+  const spread=expandedIndex>=start&&expandedIndex<start+slots&&visible
     ? (i<expandedIndex?-5.2:i>expandedIndex?5.2:0) : 0;
   b.classList.toggle('is-hidden',!visible);
   b.classList.toggle('on',visible&&i===expandedIndex&&touch);
   b.classList.toggle('is-facing',visible&&i===expandedIndex);
   b.setAttribute('aria-pressed',String(visible&&i===expandedIndex));
   b.tabIndex=visible?0:-1;
-  const positions=matchMedia("(max-width:700px)").matches&&stage.classList.contains("photo-ready")?[25,41.5,58.5,75]:XS;
+  const positions=mobile?[40,60]:XS;
   b.style.left=visible?positions[slot]+'%':'-100%';
   b.style.setProperty('--spread',spread+'cqw');
  });
@@ -321,10 +335,13 @@ if(!touch){
   const r=stage.getBoundingClientRect();
   const x=(e.clientX-r.left)/r.width*100,y=(e.clientY-r.top)/r.height*100;
   if(y<46||y>90){if(expandedIndex!==-1){expandedIndex=-1;layoutRack()}return}
-  const start=Math.max(0,Math.min(P.length-4,currentIndex-1));
+  const mobile=matchMedia("(max-width:700px)").matches;
+  const slots=mobile?2:4;
+  const start=Math.max(0,Math.min(P.length-slots,currentIndex-(mobile?0:1)));
   let slot=-1,distance=Infinity;
-  XS.forEach((pos,k)=>{const d=Math.abs(x-pos);if(d<distance){distance=d;slot=k}});
-  const chosen=distance<=5.2?start+slot:-1;
+  const zones=mobile?[40,60]:XS;
+  zones.forEach((pos,k)=>{const d=Math.abs(x-pos);if(d<distance){distance=d;slot=k}});
+  const chosen=distance<=(mobile?10:5.2)?start+slot:-1;
   if(chosen!==expandedIndex){expandedIndex=chosen;layoutRack()}
  },{passive:true});
  stage.addEventListener('pointerleave',()=>{if(expandedIndex!==-1){expandedIndex=-1;layoutRack()}});
