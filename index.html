@@ -174,9 +174,25 @@ document.addEventListener("keydown",e=>{
 function pick(){if(!touch)return;const r=sc.getBoundingClientRect(),cx=r.left+r.width/2;let best=null,bd=1e9;items.forEach(b=>{const q=b.getBoundingClientRect(),d=Math.abs(q.left+q.width/2-cx);if(d<bd){bd=d;best=b}});setActive(bd<70?items.indexOf(best):-1)}
 if(touch){document.getElementById("hint").textContent="SWIPE PARA TUMINGIN · TAP PARA HUMARAP";document.getElementById("guide").textContent="Swipe the rack · Tap a jacket · Tap again to inspect";
  let pickScheduled=false;sc.addEventListener("scroll",()=>{if(pickScheduled)return;pickScheduled=true;requestAnimationFrame(()=>{pickScheduled=false;pick()})},{passive:true});
- const centerRack=()=>{sc.scrollLeft=Math.max(0,(sc.scrollWidth-sc.clientWidth)/2);pick()};
- if(document.readyState==="complete")centerRack();else addEventListener("load",centerRack,{once:true});
- addEventListener("resize",centerRack,{passive:true});}
+}
+const narrowScreen=matchMedia("(max-width:700px)");
+let wasNarrow=false;
+function centerRack(force=false){
+ if(!narrowScreen.matches)return;
+ if(!force&&wasNarrow)return;
+ sc.scrollLeft=Math.max(0,(sc.scrollWidth-sc.clientWidth)/2);
+ if(touch)pick();
+ wasNarrow=true;
+}
+function updateShowroomViewport(){
+ if(!narrowScreen.matches){wasNarrow=false;return}
+ centerRack(true);
+}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>centerRack(true),{once:true});else centerRack(true);
+addEventListener("load",()=>centerRack(true),{once:true});
+narrowScreen.addEventListener("change",updateShowroomViewport);
+let resizeFrame=0;
+addEventListener("resize",()=>{cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(updateShowroomViewport)},{passive:true});
 </script>
 </body>
 </html>
