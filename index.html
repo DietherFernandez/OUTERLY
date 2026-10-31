@@ -56,8 +56,11 @@ header{display:flex;justify-content:space-between;align-items:center;padding:13p
  body{height:100dvh;display:flex;flex-direction:column}
  .showroom{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;background:#e9dcc7}
  .showroom .scroller{width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center}
- .showroom .stage{flex:none;width:min(100%,1600px,calc((100dvh - 133px)*1672/941));min-width:0;max-width:1600px;height:auto;aspect-ratio:1672/941}
- .showroom-overlay{left:50%;right:auto;top:50%;width:min(100%,1600px,calc((100dvh - 133px)*1672/941));transform:translate(-50%,-50%);aspect-ratio:1672/941}
+ .showroom .stage{flex:none;width:100%;min-width:0;max-width:none;height:100%;aspect-ratio:auto;background-size:100% 100%}
+ .showroom-overlay{left:0;right:0;top:0;width:100%;height:auto;transform:none;aspect-ratio:auto}
+ /* Preserve hanger alignment while keeping product silhouettes inside shorter viewports. */
+ .showroom .item{top:46.8%;height:min(27.1cqw,45cqh)}
+ .showroom .pic{width:min(20cqw,32cqh);margin-left:calc(-1 * min(9.9cqw,15.84cqh))}
  .rack-controls{flex:0 0 auto;padding:8px 12px;gap:16px}
  .rack-nav{width:36px;height:36px;font-size:20px}
  .shop-guide{flex:0 0 auto;padding:5px 14px 8px;font-size:11px}
